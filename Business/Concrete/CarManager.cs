@@ -38,13 +38,16 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Updated);
         }
         [SecuredOperation("Car.all,Admin")]
+        [ValidationAspect(typeof(CarValidator))]
         public IDataResult<List<Car>> GetAll()
         {
+
             if (DateTime.Now.Hour == 03)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(),Messages.Listed);
+            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.Listed);
+
         }
         public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
         {

@@ -60,6 +60,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("Car.getall,Admin")]
+        [ValidationAspect(typeof(CarImageValidator))]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDAL.GetAll());
