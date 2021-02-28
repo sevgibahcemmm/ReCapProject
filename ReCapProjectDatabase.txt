@@ -1,0 +1,52 @@
+CREATE TABLE [dbo].[brands] (
+    [BrandId]   INT           IDENTITY (1, 1) NOT NULL,
+    [BrandName] NVARCHAR (50) NULL,
+    CONSTRAINT [PK_brands] PRIMARY KEY CLUSTERED ([BrandId] ASC)
+);
+
+CREATE TABLE [dbo].[cars] (
+    [Id]          INT             IDENTITY (1, 1) NOT NULL,
+    [BrandId]     INT             NULL,
+    [ColorId]     INT             NULL,
+    [ModelYear]   NVARCHAR (50)   NULL,
+    [DailyPrice]  DECIMAL (18, 2) NULL,
+    [Description] NVARCHAR (MAX)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC), 
+    CONSTRAINT [FK_cars_Brands] FOREIGN KEY ([BrandId]) REFERENCES [brands]([BrandId]), 
+    CONSTRAINT [FK_cars_colors] FOREIGN KEY ([ColorId]) REFERENCES [colors]([ColorId])
+);
+
+CREATE TABLE [dbo].[colors] (
+    [ColorId]   INT           IDENTITY (1, 1) NOT NULL,
+    [ColorName] NVARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([ColorId] ASC)
+);
+
+CREATE TABLE [dbo].[customers] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [UserId]      INT            NULL,
+    [CompanyName] NVARCHAR (150) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC), 
+    CONSTRAINT [FK_customers_Users] FOREIGN KEY ([UserId]) REFERENCES [users]([Id])
+);
+
+CREATE TABLE [dbo].[rentals] (
+    [Id]         INT      IDENTITY (1, 1) NOT NULL,
+    [CarId]      INT      NULL,
+    [CustomerId] INT      NULL,
+    [RenDate]    DATETIME NULL,
+    [ReturnDate] DATETIME NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC), 
+    CONSTRAINT [FK_rentals_cars] FOREIGN KEY ([CarId]) REFERENCES [cars]([Id]),
+	 CONSTRAINT [FK_rentals_Customers] FOREIGN KEY ([CustomerId]) REFERENCES [customers]([Id])
+);
+
+CREATE TABLE [dbo].[users] (
+    [Id]        INT            IDENTITY (1, 1) NOT NULL,
+    [FirstName] NVARCHAR (50)  NULL,
+    [LastName]  NVARCHAR (50)  NULL,
+    [Email]     NVARCHAR (150) NULL,
+    [Password]  NVARCHAR (50)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
