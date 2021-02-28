@@ -7,32 +7,22 @@ namespace Business.Constains
 {
     public static class Messages
     {
-        public static string CarEdded = "Araba Eklendi";
-        public static string CarNameInvalid = "Lütfen Description alanı en az 1 karekter olmalı ve DailyPrice sıfırdan büyük olmalı..";
-        internal static string Maintenacetime = "Sistem bakımda";
 
+        public static string Added = "Ekleme İşlemi Başarılı";
+        public static string NotAdded = "Ekleme İşlemi Başarısız";
 
-        internal static string RegistrationNameInvalid = "Geçersiz Kayıt İsmi (en az 2 karekter olmalı)";
-        internal static string RegistrationAdded = "Kayıt Başarıyla Eklendi";
-        internal static string RegistrationListed = "Kayıtlar Başarıyla Listelendi";
-        internal static string RegistrationDeleted = "Kayıt Başarıyla Silindi";
-        internal static string RegistrationUpped="Kayıt Başarıyla Güncellendi";
+        public static string Deleted = "Silme İşlemi Başarılı";
+        public static string NotDeleted = "Silme İŞlemi Başarısız";
 
-        public static string Added = "Add process OK";
-        public static string NotAdded = "Add process NOT OK";
+        public static string Updated = "Güncellene İşlemi Başarılı";
+        public static string NotUpdated = "Güncelleme İşlemi Başarısız";
 
-        public static string Deleted = "Delete process OK";
-        public static string NotDeleted = "Delete process NOT OK";
+        public static string Listed = "Listeleme İşlemi Başarılı";
+        public static string NotListed = "Listeleme İşlemi Başarısız";
 
-        public static string Updated = "Update process OK";
-        public static string NotUpdated = "Update process NOT OK";
-
-        public static string Listed = "List process OK";
-        public static string NotListed = "List process NOT OK";
-
-        public static string MaintenanceTime = "System is under maintenance";
-        public static string FailedRental = "The car has not yet been delivered";
-        public static string CarImageLimitExceeded = "More than 5 images cannot be added";
-        public static string NoCarImages = "The car does NOT have any images";
+        public static string MaintenanceTime = "Sistem Bakımda";
+        public static string FailedRental = "Araba Henüz Teslim Edilmedi";
+        public static string CarImageLimitExceeded = "5'ten fazla resim eklenemez";
+        public static string NoCarImages = "Arabadaya ait Herhangi bir resim bulunamadı";
     }
 }
