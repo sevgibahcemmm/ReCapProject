@@ -1,6 +1,8 @@
-﻿using Entities.Concrete;
+﻿using Core.Entities.Concrete;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Business.Constains
@@ -24,5 +26,15 @@ namespace Business.Constains
         public static string FailedRental = "Araba Henüz Teslim Edilmedi";
         public static string CarImageLimitExceeded = "5'ten fazla resim eklenemez";
         public static string NoCarImages = "Arabadaya ait Herhangi bir resim bulunamadı";
+
+
+        public static string AuthorizationDenied = "Yetkilendirme Reddedildi (Yetkiniz Yok)";
+        public static string UserNotFound = "Kullanıcı Bulunamadı";
+        public static string SuccessfulLogin = "Başarılı Giriş";
+        public static string PasswordError = "Parola Hatası";
+        public static string UserAlreadyExists = "Bu Kullanıcı Zaten Kayıtlı...";
+        public static string AccessTokenCreated = "Token Oluşturuldu";
+        public static string UserRegistered = "Katıt Olundu";
+
     }
 }

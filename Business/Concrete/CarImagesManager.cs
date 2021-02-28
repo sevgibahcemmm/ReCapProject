@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Business.BusinessAspects.Autofac;
 using Business.Constains;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -57,6 +58,8 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<CarImage>(_carImageDAL.Get(p => p.ImageId == id));
         }
+
+        [SecuredOperation("Car.getall,Admin")]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDAL.GetAll());

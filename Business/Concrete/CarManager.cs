@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Business.BusinessAspects.Autofac;
 using Business.Constains;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -18,7 +19,7 @@ namespace Business.Concrete
         {
             _carDAL = carDAL;
         }
-
+        [SecuredOperation("Car.add,Admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
@@ -36,6 +37,7 @@ namespace Business.Concrete
             _carDAL.Update(car);
             return new SuccessResult(Messages.Updated);
         }
+        [SecuredOperation("Car.all,Admin")]
         public IDataResult<List<Car>> GetAll()
         {
             if (DateTime.Now.Hour == 03)
