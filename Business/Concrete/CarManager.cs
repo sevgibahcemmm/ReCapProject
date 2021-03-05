@@ -9,6 +9,12 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
+using Core.Aspects.Autofac.Logging;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 
 namespace Business.Concrete
 {
@@ -19,29 +25,39 @@ namespace Business.Concrete
         {
             _carDAL = carDAL;
         }
-        [SecuredOperation("Car.add,Admin")]
+        [SecuredOperation("car.add,Admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
+        [TransactionScopeAspect]
         public IResult Add(Car car)
         {
             _carDAL.Add(car);
             return new SuccessResult(Messages.Added);
 
         }
+        [TransactionScopeAspect]
         public IResult Delete(Car car)
         {
             _carDAL.Delete(car);
             return new SuccessResult(Messages.Deleted);
         }
+        [CacheRemoveAspect("ICarService.Get")]
+        [TransactionScopeAspect]
         public IResult Update(Car car)
         {
             _carDAL.Update(car);
             return new SuccessResult(Messages.Updated);
         }
-        [SecuredOperation("Car.all,Admin")]
-        [ValidationAspect(typeof(CarValidator))]
+       // [SecuredOperation("car.list,admin")]
+      //  [ValidationAspect(typeof(CarValidator))]
+        [CacheAspect]
+        [PerformanceAspect(5)]
+        [LogAspect(typeof(FileLogger))]
+        [CacheAspect(duration: 10)]
+      
         public IDataResult<List<Car>> GetAll()
         {
-
+            Thread.Sleep(5000);
             if (DateTime.Now.Hour == 03)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
@@ -53,6 +69,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Car>>(_carDAL.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max), Messages.Listed);
         }
+        [CacheAspect]
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(_carDAL.Get(c => c.Id == id));
