@@ -15,6 +15,7 @@ using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Logging;
 using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -50,10 +51,10 @@ namespace Business.Concrete
         }
        // [SecuredOperation("car.list,admin")]
       //  [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
-        [PerformanceAspect(5)]
-        [LogAspect(typeof(FileLogger))]
-        [CacheAspect(duration: 10)]
+        //[CacheAspect]
+        //[PerformanceAspect(5)]
+        //[LogAspect(typeof(FileLogger))]
+        //[CacheAspect(duration: 10)]
       
         public IDataResult<List<Car>> GetAll()
         {
@@ -65,6 +66,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.Listed);
 
         }
+
+        public IDataResult<List<CarDetailDto>> GetDetailAll()
+        {
+            //if (DateTime.Now.Hour == 03)
+            //{
+            //    return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            //}
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetCarDetailDtos(), Messages.Listed);
+        }
+
         public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
         {
             return new SuccessDataResult<List<Car>>(_carDAL.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max), Messages.Listed);
