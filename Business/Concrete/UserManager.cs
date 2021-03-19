@@ -8,52 +8,56 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Business.Constains;
 
 namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-        IUserDal _userDal;
-        public UserManager(IUserDal userDAL)
+        private IUserDal _userDal;
+        public UserManager(IUserDal userDal)
         {
-            _userDal = userDAL;
+            _userDal = userDal;
         }
         [ValidationAspect(typeof(UserValidator))]
-        public IResult Add(User User)
+        public IResult Add(User user)
         {
-            _userDal.Add(User);
-            return new SuccessResult();
+
+            _userDal.Add(user);
+            return new SuccessResult(Messages.UserAdded);
         }
-        [ValidationAspect(typeof(UserValidator))]
-        public IResult Delete(User User)
+
+        public IResult Delete(User user)
         {
-            _userDal.Delete(User);
-            return new SuccessResult();
+            _userDal.Delete(user);
+            return new SuccessResult(Messages.UserDeleted);
         }
-        [ValidationAspect(typeof(UserValidator))]
-        public IResult Update(User User)
-        {
-            _userDal.Update(User);
-            return new SuccessResult();
-        }
-        public IDataResult<List<User>> GetUsers()
+
+        public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
         }
-        public IDataResult<User> GetById(int id)
+
+        public User GetByEmail(string email)
         {
-            return new SuccessDataResult<User>(_userDal.Get(c => c.Id == id));
+            return _userDal.Get(p => p.Email == email);
+        }
+
+        public IDataResult<User> GetById(int Id)
+        {
+
+            return new SuccessDataResult<User>(_userDal.Get(p => p.Id == Id));
         }
 
         public List<OperationClaim> GetClaims(User user)
         {
-            return (_userDal.GetClaims(user));
+            return _userDal.GetClaims(user);
         }
 
-        public User GetByMail(string email)
+        public IResult Update(User user)
         {
-           return (_userDal.Get(u => u.Email == email));
+            _userDal.Update(user);
+            return new SuccessResult(Messages.UserUpdated);
         }
-      
     }
 }

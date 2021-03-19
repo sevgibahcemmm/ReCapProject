@@ -7,17 +7,12 @@ using Entities.DTOs;
 
 namespace Business.Abstract
 {
-    public interface ICarService
+    public interface ICarService:IEntityServiceBase<Car>
     {
-        IResult Add(Car car);
-        IResult Delete(Car car);
-        IResult Update(Car car);
-        IDataResult<List<Car>> GetAll();
-        IDataResult<List<CarDetailDto>> GetDetailAll();
-        IDataResult<Car> GetById(int id);
-        IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max);
-        IDataResult<List<Car>> GetCarsByBrandId(int id );
-        IDataResult<List<Car>> GetCarsByColorId(int id);
+        IDataResult<List<CarDetailDto>> GetCarsByColorId(int colorId);
+        IDataResult<List<CarDetailDto>> GetCarsDetailByBrandId(int brandId);
+        IDataResult<List<CarDetailDto>> GetCarDetail();
+        IDataResult<List<CarDetailDto>> GetCarDetailById(int carId);
     }
 
 }

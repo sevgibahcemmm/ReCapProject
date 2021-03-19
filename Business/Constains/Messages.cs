@@ -9,32 +9,35 @@ namespace Business.Constains
 {
     public static class Messages
     {
-
-        public static string Added = "Ekleme İşlemi Başarılı";
-        public static string NotAdded = "Ekleme İşlemi Başarısız";
-
-        public static string Deleted = "Silme İşlemi Başarılı";
-        public static string NotDeleted = "Silme İŞlemi Başarısız";
-
-        public static string Updated = "Güncellene İşlemi Başarılı";
-        public static string NotUpdated = "Güncelleme İşlemi Başarısız";
-
-        public static string Listed = "Listeleme İşlemi Başarılı";
-        public static string NotListed = "Listeleme İşlemi Başarısız";
-
-        public static string MaintenanceTime = "Sistem Bakımda";
-        public static string FailedRental = "Araba Henüz Teslim Edilmedi";
-        public static string CarImageLimitExceeded = "5'ten fazla resim eklenemez";
-        public static string NoCarImages = "Arabadaya ait Herhangi bir resim bulunamadı";
-
-
-        public static string AuthorizationDenied = "Yetkilendirme Reddedildi (Yetkiniz Yok)";
-        public static string UserNotFound = "Kullanıcı Bulunamadı";
-        public static string SuccessfulLogin = "Başarılı Giriş";
-        public static string PasswordError = "Parola Hatası";
-        public static string UserAlreadyExists = "Bu Kullanıcı Zaten Kayıtlı...";
-        public static string AccessTokenCreated = "Token Oluşturuldu";
-        public static string UserRegistered = "Katıt Olundu";
+        public static string UserAdded = "Kullanıcı Eklendi";
+        public static string CustomerAdded = "Müsteri eklendi";
+        public static string UserDeleted = "Kullanıcı Silindi";
+        public static string CustomerDeleted = "Müsteri Silindi";
+        public static string UserUpdated = "Kullanıcı Güncellendi";
+        public static string CustomerUpdated = "Müsteri Güncellendi";
+        public static string RentalAdded = "Araç Kiralandı (Rental tablosuna eklendi)";
+        public static string RentalDeleted = "Arac Rental Tablsoundan Silindi";
+        public static string RentalDelivered = "Araç Teslim Edildi";
+        public static string RentalBusy = "Araç Suan Kullanımda, Kiralanamaz..";
+        public static string RentalUpdated = "Arac Bilgisi Tabloda güncellendi";
+        public static string NoRecording = "Kayıt Bulunamadı";
+        public static string CarAdded = "Yeni Arac Sisteme Eklendi";
+        public static string CarDeleted = "Arac Sistemden Silindi";
+        public static string CarUpdated = "Arac Güncellendi";
+        public static string CarDidntAdded = "Eklenemedi-Arac Bilgisi en az 2 karakter olmalı";
+        public static string BrandAdded = "Marka Eklendi";
+        public static string BrandDeleted = "Marka Silindi";
+        public static string BrandUpdated = "Marka Güncellendi";
+        public static string ColorAdded = "Color Eklendi";
+        public static string ColorDeleted = "Color Silindi";
+        public static string ColorUpdated = "Color Güncellendi";
+        public static string UserNotFound = "Kullanıcı Bulunumadı.";
+        public static string IncorrectPassword = "Parola hatalı.";
+        public static string SuccessfulLogin = "Login başarılı";
+        public static string UserAlreadyExists = "kullanıcı zaten mevcut";
+        public static string Registered = "Kullanıcı Başarılı bir sekilde kayıt oldu.";
+        public static string AccessTokenCreated = "Access Token Olusturuldu..";
+        public static string AuthorizationDenied = "Yetkiniz yok";
 
     }
 }

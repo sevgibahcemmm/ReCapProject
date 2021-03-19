@@ -7,41 +7,52 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Business.Business.BusinessAspects.Autofac;
+using Business.Constains;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
     public class CustomerManager : ICustomerService
     {
-        ICustomerDal _customerDAL;
-        public CustomerManager(ICustomerDal customerDAL)
+        private ICustomerDal _customerDal;
+        public CustomerManager(ICustomerDal customerDal)
         {
-            _customerDAL = customerDAL;
+            _customerDal = customerDal;
         }
-        [ValidationAspect(typeof(CustomerValidator))]
-        public IResult Add(Customer customer)
+
+        [SecuredOperation("Kullanici")]
+        public IResult Add(Customer Tentity)
         {
-            _customerDAL.Add(customer);
-            return new SuccessResult();
+            _customerDal.Add(Tentity);
+            return new SuccessResult(Messages.CustomerAdded);
         }
-        [ValidationAspect(typeof(CustomerValidator))]
+
         public IResult Delete(Customer customer)
         {
-            _customerDAL.Delete(customer);
-            return new SuccessResult();
+            _customerDal.Delete(customer);
+            return new SuccessResult(Messages.CustomerDeleted);
         }
-        [ValidationAspect(typeof(CustomerValidator))]
-        public IResult Update(Customer customer)
+
+        public IDataResult<List<Customer>> GetAll()
         {
-            _customerDAL.Update(customer);
-            return new SuccessResult();
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
-        public IDataResult<List<Customer>> GetCustomers()
+
+        public IDataResult<Customer> GetById(int Id)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDAL.GetAll());
+            return new SuccessDataResult<Customer>(_customerDal.Get(p => p.UserId == Id));
         }
-        public IDataResult<Customer> GetById(int id)
+
+        public IDataResult<List<CustomerDetailDto>> GetCustomersDetails()
         {
-            return new SuccessDataResult<Customer>(_customerDAL.Get(c => c.Id == id));
+            return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCustomersDetail());
+        }
+
+        public IResult Update(Customer Tentity)
+        {
+            _customerDal.Update(Tentity);
+            return new SuccessResult(Messages.UserUpdated);
         }
     }
 }

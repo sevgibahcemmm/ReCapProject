@@ -8,13 +8,12 @@ using System.Text;
 
 namespace Business.Abstract
 {
-    public interface IRentalService
+    public interface IRentalService:IEntityServiceBase<Rental>
     {
-        IResult Add(Rental rental);
-        IResult Delete(Rental rental);
-        IResult Update(Rental rental);
-        IDataResult<List<Rental>> GetRentals();
-        IDataResult<Rental> GetById(int id);
+        IResult Deliver(int rentalId);
+        IDataResult<List<Rental>> InUse();
+        IDataResult<List<Rental>> NotInUse();
         IDataResult<List<RentalDetailDto>> GetRentalDetails();
+
     }
 }

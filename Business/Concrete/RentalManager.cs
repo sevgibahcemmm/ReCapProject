@@ -10,50 +10,141 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using Business.Business.BusinessAspects.Autofac;
+using Core.Aspects.Autofac.Caching;
+using Core.Utilities.Business;
 
 namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
-        IRentalDal _rentalDAL;
-        public RentalManager(IRentalDal rentalDAL)
+        private IRentalDal _rental;
+
+
+        //true müsaitlik anlamında;
+        public RentalManager(IRentalDal rental)
         {
-            _rentalDAL = rentalDAL;
+            _rental = rental;
         }
+
+        [CacheRemoveAspect("IRentalService.Get")]
+        [SecuredOperation("Kullanici")]
         [ValidationAspect(typeof(RentalValidator))]
-        public IResult Add(Rental rental)
+        public IResult Add(Rental Tentity)
         {
-            _rentalDAL.Add(rental);
-            return new SuccessResult();
+            IResult results = BusinessRules.Run(CheckIfCarInUse(Tentity.CarId));
+            if (results != null)
+            {
+                return results;
+            }
+
+            _rental.Add(Tentity);
+            return new SuccessResult(Messages.RentalAdded);
         }
+
+        //rental tablosundan silindi.
         public IResult Delete(Rental rental)
         {
-            _rentalDAL.Delete(rental);
-            return new SuccessResult();
+            IResult results = BusinessRules.Run(CheckIfDelete(rental.RentalId));
+            if (results != null)
+            {
+                return results;
+            }
+            _rental.Delete(rental);
+            return new SuccessResult(Messages.RentalDeleted);
+
         }
+
+        //bu metot çagrıldıgında arac teslim edildi.
+        //teslim edilme tarihi verildi.
+        [CacheRemoveAspect("IRentalService.Get")]
+        public IResult Deliver(int rentalId)
+        {
+            IResult results = BusinessRules.Run(CheckIfDeliver(rentalId));
+            if (results != null)
+            {
+                return results;
+            }
+
+            return new SuccessResult(Messages.RentalDelivered);
+
+        }
+
+        [CacheAspect]
+        public IDataResult<List<Rental>> GetAll()
+        {
+            return new SuccessDataResult<List<Rental>>(_rental.GetAll());
+        }
+
+        [CacheAspect]
+        public IDataResult<Rental> GetById(int Id)
+        {
+            return new SuccessDataResult<Rental>(_rental.Get(p => p.RentalId == Id));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<Rental>> InUse()
+        {
+            return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate == null));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<Rental>> NotInUse()
+        {
+            return new SuccessDataResult<List<Rental>>(_rental.GetAll(p => p.ReturnDate != null));
+        }
+
+        [CacheRemoveAspect("IRentalService.Get")]
         [ValidationAspect(typeof(RentalValidator))]
-        public IResult Update(Rental rental)
+        public IResult Update(Rental Tentity)
         {
-            _rentalDAL.Update(rental);
-            return new SuccessResult();
+            _rental.Update(Tentity);
+            return new SuccessResult(Messages.RentalUpdated);
         }
-        public IDataResult<List<Rental>> GetRentals()
-        {
-            return new SuccessDataResult<List<Rental>>(_rentalDAL.GetAll());
-        }
-        public IDataResult<Rental> GetById(int id)
-        {
-            return new SuccessDataResult<Rental>(_rentalDAL.Get(r => r.Id == id));
-        }
+        [CacheAspect]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
-            //if (DateTime.Now.Hour == 02)
-            //{
-            //    return new ErrorDataResult<List<RentalDetailDto>>(Messages.MaintenanceTime);
-            //}
-            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDAL.GetRentalDetails());
+            return new SuccessDataResult<List<RentalDetailDto>>(_rental.GetRentalDetails());
+
+
+        }
+
+        private IResult CheckIfCarInUse(int carId)
+        {
+            //bu degerlere sahip bir sey döndürüyorsa arac kullanımdadır
+            var result = _rental.Get(p => p.CarId == carId && p.ReturnDate == null);
+            if (result != null)
+            {
+                return new ErrorResult(Messages.RentalBusy);
+            }
+            return new SuccessResult();
+
+        }
+
+        private IResult CheckIfDelete(int Id)
+        {
+            var result = _rental.Get(p => p.RentalId == Id);
+            if (result == null)
+            {
+                return new ErrorResult(Messages.NoRecording);
+            }
+            if (result.ReturnDate == null)
+            {
+                return new ErrorResult(Messages.RentalBusy);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfDeliver(int rentalId)
+        {
+            var result = _rental.Get(p => p.RentalId == rentalId);
+            if (result.ReturnDate != null)
+            {
+                return new ErrorResult(Messages.NoRecording);
+            }
+            result.ReturnDate = DateTime.Now.Date;
+            Update(result);
+            return new SuccessResult();
         }
     }
-} 
-
-
+}

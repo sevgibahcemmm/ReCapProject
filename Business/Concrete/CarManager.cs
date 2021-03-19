@@ -21,78 +21,88 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _carDAL;
-        public CarManager(ICarDal carDAL)
+
+        ICarDal _carDal;
+        ICarImageService _carImageService;
+        public CarManager(ICarDal carDal, ICarImageService carImageService)
         {
-            _carDAL = carDAL;
-        }
-        [SecuredOperation("car.add,Admin")]
-        [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("ICarService.Get")]
-        [TransactionScopeAspect]
-        public IResult Add(Car car)
-        {
-            _carDAL.Add(car);
-            return new SuccessResult(Messages.Added);
+            _carDal = carDal;
+            _carImageService = carImageService;
 
         }
-        [TransactionScopeAspect]
+
+        // [TransactionalScopeAspect]
+        [CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CarValidator))]
+        public IResult Add(Car car)
+        {
+
+            _carDal.Add(car);
+
+            return new SuccessResult(Messages.CarAdded);
+
+
+        }
         public IResult Delete(Car car)
         {
-            _carDAL.Delete(car);
-            return new SuccessResult(Messages.Deleted);
+            _carDal.Delete(car);
+            return new ErrorResult(Messages.CarDeleted);
+
         }
-        [CacheRemoveAspect("ICarService.Get")]
-        [TransactionScopeAspect]
-        public IResult Update(Car car)
+
+        [CacheAspect]
+        public IDataResult<List<Car>> GetAll()
         {
-            _carDAL.Update(car);
-            return new SuccessResult(Messages.Updated);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
+
         }
-       // [SecuredOperation("car.list,admin")]
-      //  [ValidationAspect(typeof(CarValidator))]
+
+        [CacheAspect]
+        public IDataResult<Car> GetById(int CarId)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(p => p.CarId == CarId));
+        }
+        // [SecuredOperation("car.list,admin")]
+        //[ValidationAspect(typeof(CarValidator))]
         //[CacheAspect]
         //[PerformanceAspect(5)]
         //[LogAspect(typeof(FileLogger))]
         //[CacheAspect(duration: 10)]
-      
-        public IDataResult<List<Car>> GetAll()
+        public IDataResult<List<CarDetailDto>> GetCarDetail()
         {
-            Thread.Sleep(5000);
-            if (DateTime.Now.Hour == 03)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.Listed);
 
-        }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
 
-        public IDataResult<List<CarDetailDto>> GetDetailAll()
-        {
-            //if (DateTime.Now.Hour == 03)
-            //{
-            //    return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
-            //}
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetCarDetailDtos(), Messages.Listed);
-        }
-
-        public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
-        {
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max), Messages.Listed);
         }
         [CacheAspect]
-        public IDataResult<Car> GetById(int id)
+        public IDataResult<List<CarDetailDto>> GetCarDetailById(int carId)
         {
-            return new SuccessDataResult<Car>(_carDAL.Get(c => c.Id == id));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(p => p.CarId == carId));
+
         }
-        public IDataResult<List<Car>> GetCarsByBrandId(int id)
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarsDetailByBrandId(int BrandId)
         {
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(c => c.BrandId == id));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(p => p.CarId == BrandId));
+
         }
-        public IDataResult<List<Car>> GetCarsByColorId(int id)
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarsByColorId(int ColorId)
         {
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(c => c.ColorId == id));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.CarId == ColorId));
+
         }
+
+        [CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CarValidator))]
+        public IResult Update(Car car)
+        {
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);
+        }
+
 
     }
 }
