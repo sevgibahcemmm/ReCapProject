@@ -36,7 +36,7 @@ namespace ReCapProject
             {
                 foreach (var rental in rentalManager.GetRentalDetails().Data)
                 {
-                    Console.WriteLine("{0}--{1}--{2}--{3}", rental.CompanyName, rental.CarName, rental.ReturnDate, rental.RentDate);
+              //      Console.WriteLine("{0}--{1}--{2}--{3}", rental.CompanyName, rental.CarName, rental.ReturnDate, rental.RentDate);
                 }
                 Console.WriteLine(result.Message);
             }
@@ -69,57 +69,57 @@ namespace ReCapProject
 
         private static void CustomerAdded()
         {
-            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+          //  CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
 
-            var result = customerManager.Update(new Customer {Id=1003, CompanyName = "4. Müşteri Güncellendi", UserId = 1 });
+          ////  var result = customerManager.Update(new Customer {Id=1003, CompanyName = "4. Müşteri Güncellendi", UserId = 1 });
 
-            Console.WriteLine("----------Customer Detail List ------------");
-            if (result.Success == true)
-            {
-                //foreach (var carr in customerManager.GetAll().Data)
-                //{
-                //    Console.WriteLine("{0}--{1}", carr.CompanyName, carr.UserId);
-                //}
-                //Console.WriteLine(result.Message);
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
+          //  Console.WriteLine("----------Customer Detail List ------------");
+          //  if (result.Success == true)
+          //  {
+          //      //foreach (var carr in customerManager.GetAll().Data)
+          //      //{
+          //      //    Console.WriteLine("{0}--{1}", carr.CompanyName, carr.UserId);
+          //      //}
+          //      //Console.WriteLine(result.Message);
+          //  }
+          //  else
+          //  {
+          //      Console.WriteLine(result.Message);
+          //  }
         }
 
         private static void CarDetailTest()
         {
-            CarManager car = new CarManager(new EfCarDal());
+            //CarManager car = new CarManager(new EfCarDal());
 
-            //var result = car.GetByDailyPrice();
+            ////var result = car.GetByDailyPrice();
 
-            //Console.WriteLine("----------Car Detail List ------------");
-            //if (result.Success == true)
-            //{
-            //    foreach (var carr in result.Data)
-            //    {
-            //        Console.WriteLine("{0}--{1}--{2}--{3}", carr.BrandName, carr.ColorName, carr.DailyPrice, carr.Description);
-            //    }
-            //    Console.WriteLine(result.Message);
-            //}
-            //else
-            //{
-            //    Console.WriteLine(result.Message);
+            ////Console.WriteLine("----------Car Detail List ------------");
+            ////if (result.Success == true)
+            ////{
+            ////    foreach (var carr in result.Data)
+            ////    {
+            ////        Console.WriteLine("{0}--{1}--{2}--{3}", carr.BrandName, carr.ColorName, carr.DailyPrice, carr.Description);
+            ////    }
+            ////    Console.WriteLine(result.Message);
+            ////}
+            ////else
+            ////{
+            ////    Console.WriteLine(result.Message);
             //}
 
         }
         private static void CarTest()
         {
-            CarManager car = new CarManager(new EfCarDal());
+            //CarManager car = new CarManager(new EfCarDal());
 
-            //carManager.Add(new Car { BrandId = 1003, ColorId = 1002,  ModelYear = "2021", DailyPrice = 125000, Description = "Yeni Kaydedilen Araba" });
+            ////carManager.Add(new Car { BrandId = 1003, ColorId = 1002,  ModelYear = "2021", DailyPrice = 125000, Description = "Yeni Kaydedilen Araba" });
 
-            foreach (var carr in car.GetAll().Data)
-            {
-                Console.WriteLine(carr.Description);
-                Console.WriteLine("----------------------");
-            }
+            //foreach (var carr in car.GetAll().Data)
+            //{
+            //    Console.WriteLine(carr.Description);
+            //    Console.WriteLine("----------------------");
+            //}
           
         }
         private static void ColorTest()

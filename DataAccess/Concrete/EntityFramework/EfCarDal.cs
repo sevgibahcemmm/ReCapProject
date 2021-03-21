@@ -8,37 +8,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Core.Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
     public class EfCarDal : EfEntityRepositoryBase<Car, ReCapProjectContext>, ICarDal
     {
-        public List<CarDetailDto> GetCarDetails(Expression<Func<CarDetailDto, bool>> filter = null)
+        public CarDetailDto GetCarDetail(int carId)
         {
             using (ReCapProjectContext context = new ReCapProjectContext())
             {
-                var result = from cars in context.Cars 
-                     join brand in context.Brands
-                        on cars.BrandId equals brand.BrandId
-                    join color in context.Colors
-                        on cars.ColorId equals color.ColorId
-                    join carImage in context.CarImages 
-                        on cars.CarId equals carImage.CarId
-                        into dept from carImage in dept.DefaultIfEmpty()
-
-                             select new CarDetailDto
+                var result = from p in context.Cars.Where(p => p.CarId == carId)
+                    join c in context.Colors
+                        on p.ColorId equals c.ColorId
+                    join d in context.Brands
+                        on p.BrandId equals d.BrandId
+                    select new CarDetailDto
                     {
-                        CarId =cars.CarId,
-                        Description = cars.Description,
-                        BrandName = brand.BrandName,
-                        ColorName = color.ColorName,
-                        DailyPrice = cars.DailyPrice,
-                        ImagePath = carImage.ImagePath
-                        
+                        BrandName = d.BrandName,
+                        ColorName = c.ColorName,
+                        DailyPrice = p.DailyPrice,
+                        Description = p.Description,
+                        ModelYear = p.ModelYear,
+                        CarId = p.CarId,
+                        Status = !context.Rentals.Any(p => p.CarId == carId && p.ReturnDate == null)
                     };
 
-                return filter == null ? result.ToList() : result.Where(filter).ToList();
+                return result.SingleOrDefault();
+            }
+        }
 
+        public List<CarDetailDto> GetCarsDetail(Expression<Func<Car, bool>> filter = null)
+        {
+            using (ReCapProjectContext context = new ReCapProjectContext())
+            {
+                var result = from p in filter == null ? context.Cars : context.Cars.Where(filter)
+                    join c in context.Colors
+                        on p.ColorId equals c.ColorId
+                    join d in context.Brands
+                        on p.BrandId equals d.BrandId
+                    select new CarDetailDto
+                    {
+                        BrandName = d.BrandName,
+                        ColorName = c.ColorName,
+                        DailyPrice = p.DailyPrice,
+                        Description = p.Description,
+                        ModelYear = p.ModelYear,
+                        CarId = p.CarId
+                    };
+                return result.ToList();
             }
         }
     }

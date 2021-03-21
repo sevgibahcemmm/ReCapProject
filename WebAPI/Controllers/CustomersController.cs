@@ -19,28 +19,6 @@ namespace WebAPI.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet("getall")]
-        public IActionResult GetAll()
-        {
-            var result = _customerService.GetAll();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
-        {
-            var result = _customerService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
         [HttpPost("add")]
         public IActionResult Add(Customer customer)
         {
@@ -53,7 +31,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         public IActionResult Delete(Customer customer)
         {
             var result = _customerService.Delete(customer);
@@ -64,8 +42,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-
-        [HttpPost("update")]
+        [HttpPut("update")]
         public IActionResult Update(Customer customer)
         {
             var result = _customerService.Update(customer);
@@ -76,10 +53,21 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetCustomersDetail")]
-        public IActionResult GetCustomersDetails()
+        [HttpGet("getAll")]
+        public IActionResult GetAll()
         {
-            var result = _customerService.GetCustomersDetails();
+            var result = _customerService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getById")]
+        public IActionResult GetById(int id)
+        {
+            var result = _customerService.GetById(id);
             if (result.Success)
             {
                 return Ok(result);

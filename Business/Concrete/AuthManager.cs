@@ -47,7 +47,7 @@ namespace Business.Concrete
             }
             if (!HashingHelper.VerifyPasswordHash(userForLogin.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
             {
-                return new ErrorDataResult<User>(Messages.IncorrectPassword);
+                return new ErrorDataResult<User>(Messages.PasswordError);
             }
             return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
         }
@@ -67,7 +67,7 @@ namespace Business.Concrete
 
             };
             _userService.Add(user);
-            return new SuccessDataResult<User>(user, Messages.Registered);
+            return new SuccessDataResult<User>(user, Messages.UserRegistered);
 
 
         }

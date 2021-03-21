@@ -30,7 +30,7 @@ namespace Business.Concrete
         public IResult Delete(User user)
         {
             _userDal.Delete(user);
-            return new SuccessResult(Messages.UserDeleted);
+            return new SuccessResult(Messages.Silme);
         }
 
         public IDataResult<List<User>> GetAll()
@@ -57,7 +57,7 @@ namespace Business.Concrete
         public IResult Update(User user)
         {
             _userDal.Update(user);
-            return new SuccessResult(Messages.UserUpdated);
+            return new SuccessResult(Messages.Guncelleme);
         }
     }
 }

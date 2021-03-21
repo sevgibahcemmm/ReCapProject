@@ -9,35 +9,41 @@ namespace Business.Constains
 {
     public static class Messages
     {
-        public static string UserAdded = "Kullanıcı Eklendi";
-        public static string CustomerAdded = "Müsteri eklendi";
-        public static string UserDeleted = "Kullanıcı Silindi";
-        public static string CustomerDeleted = "Müsteri Silindi";
-        public static string UserUpdated = "Kullanıcı Güncellendi";
-        public static string CustomerUpdated = "Müsteri Güncellendi";
-        public static string RentalAdded = "Araç Kiralandı (Rental tablosuna eklendi)";
-        public static string RentalDeleted = "Arac Rental Tablsoundan Silindi";
-        public static string RentalDelivered = "Araç Teslim Edildi";
-        public static string RentalBusy = "Araç Suan Kullanımda, Kiralanamaz..";
-        public static string RentalUpdated = "Arac Bilgisi Tabloda güncellendi";
-        public static string NoRecording = "Kayıt Bulunamadı";
-        public static string CarAdded = "Yeni Arac Sisteme Eklendi";
-        public static string CarDeleted = "Arac Sistemden Silindi";
-        public static string CarUpdated = "Arac Güncellendi";
-        public static string CarDidntAdded = "Eklenemedi-Arac Bilgisi en az 2 karakter olmalı";
-        public static string BrandAdded = "Marka Eklendi";
-        public static string BrandDeleted = "Marka Silindi";
-        public static string BrandUpdated = "Marka Güncellendi";
-        public static string ColorAdded = "Color Eklendi";
-        public static string ColorDeleted = "Color Silindi";
-        public static string ColorUpdated = "Color Güncellendi";
-        public static string UserNotFound = "Kullanıcı Bulunumadı.";
-        public static string IncorrectPassword = "Parola hatalı.";
-        public static string SuccessfulLogin = "Login başarılı";
-        public static string UserAlreadyExists = "kullanıcı zaten mevcut";
-        public static string Registered = "Kullanıcı Başarılı bir sekilde kayıt oldu.";
-        public static string AccessTokenCreated = "Access Token Olusturuldu..";
-        public static string AuthorizationDenied = "Yetkiniz yok";
+        public static string[] ValidImageFileTypes = { ".JPG", ".JPEG", ".PNG", ".TIF", ".TIFF", ".GIF", ".BMP", ".ICO" };
+
+        public static string Ekleme = "Ekleme İşlemi Başarılı";
+        public static string Mesgul = "Meşgul";
+        public static string Basarısız = "Ekleme İşlemi Başarısız";
+        public static string Gecersizİsim = "İsim geçersiz";
+        public static string SistemBakımda = "Sistem bakımda";
+        public static string Listeleme = "Kayıtlar Başarıyla Listelendi";
+        public static string Silme = "Kayıt Başarıyla Silindi";
+        public static string Guncelleme = "Kayıt Başarıyla Güncellendi";
+
+        public static string UserAdded = "Kullanıcı eklendi";
+        public static string UsersListed = "Kullanıcılar listelendi";
+
+        public static string CustomerAdded = "Müşteri eklendi";
+        public static string CustomersListed = "Müşteriler listelendi";
+
+        public static string RentalAdded = "Araba kiralandı";
+        public static string RentalListed = "Kiralama listelendi";
+        public static string CarUndelivered = "Araba henüz teslim edilmeemiş";
+
+        public static string ImageLimitExpiredForCar = "Bir arabaya maximum 5 fotoğraf eklenebilir";
+        public static string InvalidImageExtension = "Geçersiz dosya uzantısı, fotoğraf için kabul edilen uzantılar" + string.Join(",", ValidImageFileTypes);
+        public static string CarImageMustBeExists = "Böyle bi resim bulunamadı";
+        public static string CarHaveNoImage = "Arabaya ait bi resim yok";
+
+
+        public static string UserNotFound = "Kullanıcı bulunamadı";
+        public static string PasswordError = "Şifre hatalı";
+        public static string SuccessfulLogin = "Sisteme giriş başarılı";
+        public static string UserAlreadyExists = "Bu kullanıcı zaten mevcut";
+        public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
+        public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
+
+        public static string AuthorizationDenied = "";
 
     }
 }
