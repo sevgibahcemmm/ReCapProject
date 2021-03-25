@@ -21,147 +21,131 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        private readonly ICarDal _carDal;
-        private readonly ICarImageService _carImageService;
+        private ICarDal _carDal;
 
-        public CarManager(ICarDal carDal, ICarImageService carImageService)
+        public CarManager(ICarDal carDal)
         {
-            _carImageService = carImageService;
             _carDal = carDal;
         }
-        [CacheRemoveAspect("Get")]
-        [ValidationAspect(typeof(CarValidator))]
-        public IResult Add(Car Tentity)
-        {
 
-            _carDal.Add(Tentity);
-            return new SuccessResult(Messages.Ekleme);
+        //[ValidationAspect(typeof(CarValidator))]
+        //[SecuredOperation("admin")]
+        [CacheRemoveAspects("ICarService.Get")]
+        public IResult Add(Car car)
+        {
+            _carDal.Add(car);
+            return new SuccessResult(Messages.CarAddSuccess);
         }
 
-        [CacheRemoveAspect("Get")]
-        [TransactionScopeAspect]
-        [PerformanceAspect(0)]
-        public IResult AddTransactionTest(Car entity)
+        [SecuredOperation("admin")]
+        [CacheRemoveAspects("ICarService.Get")]
+        public IResult Delete(Car car)
         {
-
-            _carDal.Add(entity);
-            if (entity.BrandId == 1002)
+            var result = _carDal.Get(c => c.CarId == car.CarId);
+            if (result == null)
             {
-                throw new Exception("");
+                return new ErrorResult(Messages.CarDeleteError);
             }
 
-            entity.CarId = 0;
-            entity.Description = "TransactionTest" + entity.Description;
-            _carDal.Add(entity);
-            return new SuccessResult(Messages.Ekleme);
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.CarDeleteSuccess);
         }
 
-        public IResult Delete(Car Tentity)
-        {
-            _carDal.Delete(Tentity);
-            return new SuccessResult(Messages.Silme);
-        }
-
+        [CacheAspect()]
+        //[PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
         {
-            List<Car> cars = _carDal.GetAll();
-            if (cars.Count == 0)
+            var result = _carDal.GetAll();
+            if (result == null)
             {
-                return new ErrorDataResult<List<Car>>(Messages.Basarısız);
+                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
             }
-            else
-            {
-                return new SuccessDataResult<List<Car>>(cars, Messages.Listeleme);
-            }
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarGetAllSuccess);
         }
 
-        public IDataResult<Car> GetById(int Id)
+        [CacheAspect()]
+        public IDataResult<Car> GetById(int id)
         {
-            Car car = _carDal.Get(p => p.CarId == Id);
-            if (car == null)
+            var result = _carDal.Get(c => c.CarId == id);
+            if (result == null)
             {
-                return new ErrorDataResult<Car>(Messages.Basarısız);
+                return new SuccessDataResult<Car>(Messages.CarGetByIdError);
             }
-            else
-            {
-                return new SuccessDataResult<Car>(car, Messages.Listeleme);
-            }
+
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == id), Messages.CarGetByIdSuccess);
         }
 
-        public IDataResult<CarDetailAndImagesDto> GetCarDetailAndImagesDto(int carId)
+        [CacheAspect()]
+        public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int id)
         {
-            var result = _carDal.GetCarDetail(carId);
-            var imageResult = _carImageService.GetAllByCarId(carId);
-            if (result == null || imageResult.Success == false)
+            var result = _carDal.GetCarDetails(c => c.BrandId == id);
+            if (result == null)
             {
-                return new ErrorDataResult<CarDetailAndImagesDto>(Messages.Basarısız);
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.CarGetCarsByBrandIdError);
             }
-
-            var carDetailAndImagesDto = new CarDetailAndImagesDto
-            {
-                Car = result,
-                CarImages = imageResult.Data
-            };
-
-            return new SuccessDataResult<CarDetailAndImagesDto>(carDetailAndImagesDto, Messages.Listeleme);
+            return new SuccessDataResult<List<CarDetailDto>>(result, Messages.CarGetCarsByBrandIdSuccess);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarsDetail()
+        [CacheAspect()]
+        public IDataResult<List<CarDetailDto>> GetCarsByColorId(int id)
         {
-            List<CarDetailDto> carDetails = _carDal.GetCarsDetail();
-            if (carDetails == null)
+            var result = _carDal.GetCarDetails(c => c.ColorId == id);
+            if (result == null)
             {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.Basarısız);
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.CarGetCarsByColorIdError);
             }
-            else
-            {
-                return new SuccessDataResult<List<CarDetailDto>>(carDetails, Messages.Listeleme);
-            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == id), Messages.CarGetCarsByColorIdSuccess);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarsDetailByBrandId(int brandId)
+        [CacheAspect()]
+        public IDataResult<List<CarDetailDto>> GetCarsDetailDto()
         {
-            List<CarDetailDto> carDetails = _carDal.GetCarsDetail(p => p.BrandId == brandId);
-            if (carDetails == null)
-            {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.Basarısız);
-            }
-            else
-            {
-                return new SuccessDataResult<List<CarDetailDto>>(carDetails, Messages.Listeleme);
-            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarGetAllSuccess);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarsDetailByBrandIdAndColorId(int brandId, int colorId)
+        public IDataResult<List<CarDetailDto>> GetCarsByCarId(int carId)
         {
-            List<CarDetailDto> carDetails = _carDal.GetCarsDetail(p => p.BrandId == brandId && p.ColorId == colorId);
-            if (carDetails == null)
-            {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.Basarısız);
-            }
-            else
-            {
-                return new SuccessDataResult<List<CarDetailDto>>(carDetails, Messages.Listeleme);
-            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.CarId == carId), Messages.CarGetAllSuccess);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarsDetailByColorId(int colorId)
+        [CacheAspect()]
+        public IDataResult<List<CarDetailDto>> GetCarByIdDetailDto(int id)
         {
-            List<CarDetailDto> carDetails = _carDal.GetCarsDetail(p => p.ColorId == colorId);
-            if (carDetails == null)
-            {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.Basarısız);
-            }
-            else
-            {
-                return new SuccessDataResult<List<CarDetailDto>>(carDetails, Messages.Listeleme);
-            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.CarId == id), Messages.CarGetAllSuccess);
         }
 
-        public IResult Update(Car Tentity)
+        [CacheAspect()]
+        public IDataResult<List<CarDetailDto>> GetCarsByColorAndBrandId(int colorId, int brandId)
         {
-            _carDal.Update(Tentity);
-            return new SuccessResult(Messages.Guncelleme);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId && c.BrandId == brandId), Messages.CarGetAllSuccess);
         }
+
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Car car)
+        {
+            //_carDal.Add(car);
+            //if (car.DailyPrice > 2)
+            //{
+            //    throw new Exception("transaction error");
+            //}
+            //_carDal.Add(car);
+            return new SuccessResult("başarılı mesajı");
+        }
+
+        [ValidationAspect(typeof(CarValidator))]
+        [SecuredOperation("admin")]
+        [CacheRemoveAspects("ICarService.Get")]
+        public IResult Update(Car car)
+        {
+            var result = _carDal.Get(c => c.CarId == car.CarId);
+            if (result == null)
+            {
+                return new ErrorResult(Messages.CarUpdateError);
+            }
+
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdateSuccess);
+        }
+
     }
 }

@@ -13,44 +13,49 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        IAuthService _authService;
+        private IAuthService _authService;
+
         public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
 
         [HttpPost("login")]
-        public ActionResult Login(UserForLoginDto userForLoginDTO)
+        public ActionResult Login(UserForLoginDto userForLoginDto)
         {
-            var userToLogin = _authService.Login(userForLoginDTO);
+            var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
                 return BadRequest(userToLogin.Message);
             }
-            var tokenCheck = _authService.CreateAccessToken(userToLogin.Data);
-            if (tokenCheck.Success)
+
+            var result = _authService.CreateAccessToken(userToLogin.Data);
+            if (result.Success)
             {
-                return Ok(tokenCheck.Data); //üretilen token ın gösterilmesi gerek.
+                return Ok(result.Data);
             }
-            return BadRequest(tokenCheck.Message);
+
+            return BadRequest(result.Message);
         }
 
         [HttpPost("register")]
-        public ActionResult Register(UserForRegisterDto userForRegisterDTO)
+        public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
-            var userCheck = _authService.Exists(userForRegisterDTO.Email);
-            if (!userCheck.Success)
+            var userExists = _authService.UserExists(userForRegisterDto.Email);
+            if (!userExists.Success)
             {
-                return BadRequest(userCheck.Message);
+                return BadRequest(userExists.Message);
             }
-            //böyle bir email yok ise kayıt islemine devam edebilir
-            var userToRegister = _authService.Register(userForRegisterDTO, userForRegisterDTO.Password);
-            var tokenCheck = _authService.CreateAccessToken(userToRegister.Data);
-            if (tokenCheck.Success)
+
+            var registerResult = _authService.Register(userForRegisterDto, userForRegisterDto.Password);
+            var result = _authService.CreateAccessToken(registerResult.Data);
+            if (result.Success)
             {
-                return Ok(tokenCheck.Data);
+                return Ok(result.Data);
             }
-            return BadRequest(tokenCheck.Message);
+
+            return BadRequest(result.Message);
         }
+
     }
 }

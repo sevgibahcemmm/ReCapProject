@@ -15,49 +15,11 @@ namespace WebAPI.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        IRentalService _rentalService;
-        private readonly IPaymentService _paymentService;
+        private IRentalService _rentalService;
 
-        public RentalsController(IRentalService rentalService, IPaymentService paymentService)
+        public RentalsController(IRentalService rentalService)
         {
             _rentalService = rentalService;
-            _paymentService = paymentService;
-        }
-
-        [HttpPost("add")]
-        public IActionResult Add(Rental rental)
-        {
-            var result = _rentalService.Add(rental);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
-        }
-
-        [HttpDelete("delete")]
-        public IActionResult Delete(Rental rental)
-        {
-            var result = _rentalService.Delete(rental);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
-        }
-
-        [HttpPut("update")]
-        public IActionResult Update(Rental rental)
-        {
-            var result = _rentalService.Update(rental);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
         }
 
         [HttpGet("getAll")]
@@ -72,10 +34,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAllByCarId")]
-        public IActionResult GetAllByCarId(int carId)
+        [HttpGet("getAllDetail")]
+        public IActionResult GetAllDetailDto()
         {
-            var result = _rentalService.GetAllByCarId(carId);
+            var result = _rentalService.GetAllRentalDetail();
             if (result.Success)
             {
                 return Ok(result);
@@ -84,10 +46,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAllByCustomerId")]
-        public IActionResult GetAllByCustomerId(int customerId)
+        [HttpGet("getByRentalId")]
+        public IActionResult GetById(int rentalId)
         {
-            var result = _rentalService.GetAllByCustomerId(customerId);
+            var result = _rentalService.GetById(rentalId);
             if (result.Success)
             {
                 return Ok(result);
@@ -96,10 +58,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getById")]
-        public IActionResult GetById(int id)
+        [HttpGet("getByCarId")]
+        public IActionResult GetByCarId(int carId)
         {
-            var result = _rentalService.GetById(id);
+            var result = _rentalService.GetRentalDetailByCarId(carId);
             if (result.Success)
             {
                 return Ok(result);
@@ -108,10 +70,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAllRentalDetails")]
-        public IActionResult GetAllRentalDetails()
+        [HttpPost("update")]
+        public IActionResult Update([FromForm] Rental rental)
         {
-            var result = _rentalService.GetAllRentalsDetails();
+            var result = _rentalService.Update(rental);
             if (result.Success)
             {
                 return Ok(result);
@@ -120,10 +82,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getLastByCarId")]
-        public IActionResult GetLastByCarId(int carId)
+        [HttpPost("add")]
+        public IActionResult Add(Rental rental)
         {
-            var result = _rentalService.GetAllByCarId(carId);
+            var result = _rentalService.Add(rental);
             if (result.Success)
             {
                 return Ok(result);
@@ -132,38 +94,16 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("isRenTable")]
-        public IActionResult IsRenTable(Rental rental)
+        [HttpPost("delete")]
+        public IActionResult Delete(Rental rental)
         {
-            var result = _rentalService.IsRenTable(rental);
+            var result = _rentalService.Delete(rental);
             if (result.Success)
             {
                 return Ok(result);
             }
 
-            return Ok(result);
-        }
-
-
-        [HttpPost("paymentAdd")]
-        [TransactionScopeAspect]
-        public ActionResult PaymentAdd(RentalPaymentDto rentalPaymentDto)
-        {
-            var paymentResult = _paymentService.ReceivePayment(rentalPaymentDto.Payment);
-            if (!paymentResult.Success)
-            {
-                return BadRequest(paymentResult);
-            }
-
-            var result = _rentalService.Add(rentalPaymentDto.Rental);
-
-            if (result.Success)
-                return Ok(result);
-            else
-            {
-                throw new System.Exception(result.Message);
-                //return BadRequest(result);                    
-            }
+            return BadRequest(result);
         }
     }
 }

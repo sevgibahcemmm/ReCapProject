@@ -19,9 +19,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.DependencyResolvers;
+using Microsoft.Extensions.FileProviders;
 
 namespace WebAPI
 {
@@ -76,7 +78,14 @@ namespace WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseStaticFiles(); //resimleri alabilmek için.
+            //app.UseStaticFiles(); //resimleri alabilmek için.
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "images")),
+                RequestPath = "/images"
+            });
             app.UseAuthentication();
 
             app.UseAuthorization();

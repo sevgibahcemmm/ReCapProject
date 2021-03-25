@@ -7,7 +7,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfFakeCardDal : EfEntityRepositoryBase<FakeCard, ReCapProjectContext>, IFakeCardDal
+    public class EfPaymentDal : EfEntityRepositoryBase<Payment, ReCapProjectContext>, IPaymentDal
     {
     }
 }

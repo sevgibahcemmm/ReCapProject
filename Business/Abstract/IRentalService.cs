@@ -10,10 +10,8 @@ namespace Business.Abstract
 {
     public interface IRentalService:IEntityServiceBase<Rental>
     {
-        IDataResult<List<Rental>> GetAllByCarId(int carId);
-        IDataResult<List<Rental>> GetAllByCustomerId(int customerId);
-        IDataResult<List<RentalDetailDto>> GetAllRentalsDetails();
-        IResult IsRenTable(Rental rental);
+        IDataResult<RentalDetailDto> GetRentalDetailByCarId(int carId);
+        IDataResult<List<RentalDetailDto>> GetAllRentalDetail();
 
     }
 }

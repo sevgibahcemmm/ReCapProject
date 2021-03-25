@@ -11,14 +11,18 @@ namespace Business.Concrete
 {
     public class PaymentManager : IPaymentService
     {
-        public IResult ReceivePayment(Payment payment)
-        {
-            if (payment.Amount > 5000)
-            {
-                return new ErrorResult(Messages.Basarısız);
-            }
+        private IPaymentDal _paymentDal;
 
-            return new SuccessResult(Messages.Ekleme);
+        public PaymentManager(IPaymentDal paymentDal)
+        {
+            _paymentDal = paymentDal;
+        }
+
+        public IResult AddPayment(Payment payment)
+        {
+            payment.ProcessDate = DateTime.Now;
+            _paymentDal.Add(payment);
+            return new SuccessResult("Refactor edilecek başarılı payment mesajı");
         }
     }
 }

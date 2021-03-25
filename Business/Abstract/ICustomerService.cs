@@ -9,6 +9,6 @@ namespace Business.Abstract
 {
     public interface ICustomerService:IEntityServiceBase<Customer>
     {
-        IDataResult<List<CustomerDetailDto>> GetCustomersDetails();
+        IDataResult<List<CustomerDetailDto>> GetAllDetails();
     }
 }

@@ -9,8 +9,10 @@ namespace Core.Utilities.Helpers
 {
     public class FileHelper
     {
-        static string directory = Directory.GetCurrentDirectory() + @"\wwwroot\";
-        static string path = @"Images\";
+
+
+        static string directory = Directory.GetCurrentDirectory() + @"\wwwroot\uploads\";
+        static string path = @"images\";
         public static string Add(IFormFile file)
         {
             string extension = Path.GetExtension(file.FileName).ToUpper();
@@ -27,20 +29,20 @@ namespace Core.Utilities.Helpers
             return (path + newFileName).Replace("\\", "/");
         }
 
-        public static string Update(IFormFile file, string oldImagePath)
+        public static string Update(IFormFile file, string OldImagePath)
         {
-            Delete(oldImagePath);
+            Delete(OldImagePath);
             return Add(file);
         }
 
-        public static void Delete(string imagePath)
+        public static void Delete(string ImagePath)
         {
-            if (File.Exists(directory + imagePath.Replace("/", "\\"))
-                && Path.GetFileName(imagePath) != "default.png")
+            if (File.Exists(directory + ImagePath.Replace("/", "\\")) && Path.GetFileName(ImagePath) != "default.png")
             {
-                File.Delete(directory + imagePath.Replace("/", "\\"));
+                File.Delete(directory + ImagePath.Replace("/", "\\"));
             }
         }
+
 
     }
 }

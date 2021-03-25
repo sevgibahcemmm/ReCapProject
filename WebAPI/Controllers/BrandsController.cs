@@ -14,7 +14,7 @@ namespace WebAPI.Controllers
     public class BrandsController : ControllerBase
     {
 
-        IBrandService _brandService;
+        private IBrandService _brandService;
 
         public BrandsController(IBrandService brandService)
         {
@@ -29,17 +29,31 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
+
             return BadRequest(result);
         }
 
-        [HttpGet("getById")]
-        public IActionResult GetById(int id)
+        [HttpGet("getByBrandId")]
+        public IActionResult GetById(int brandId)
         {
-            var result = _brandService.GetById(id);
+            var result = _brandService.GetById(brandId);
             if (result.Success)
             {
                 return Ok(result);
             }
+
+            return BadRequest(result);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(Brand brand)
+        {
+            var result = _brandService.Update(brand);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
             return BadRequest(result);
         }
 
@@ -51,9 +65,9 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
+
             return BadRequest(result);
         }
-
 
         [HttpPost("delete")]
         public IActionResult Delete(Brand brand)
@@ -63,19 +77,8 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result.Message);
-        }
 
-
-        [HttpPost("update")]
-        public IActionResult Update(Brand brand)
-        {
-            var result = _brandService.Update(brand);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
     }
 }

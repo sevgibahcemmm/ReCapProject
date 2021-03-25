@@ -6,7 +6,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Abstract
 {
-    public interface IFakeCardDal : IEntityRepository<FakeCard>
+    public interface IPaymentDal : IEntityRepository<Payment>
     {
     }
 }

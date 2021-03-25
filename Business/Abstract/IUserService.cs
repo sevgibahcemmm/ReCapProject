@@ -6,10 +6,14 @@ using System.Text;
 
 namespace Business.Abstract
 {
-    public interface IUserService:IEntityServiceBase<User>
+    public interface IUserService
     {
-        List<OperationClaim> GetClaims(User user);
-        User GetByEmail(string email);
-
+        IDataResult<List<User>> GetAll();
+        IDataResult<User> GetById(int id);
+        IResult Add(User user);
+        IResult Update(User user);
+        IResult Delete(User user);
+        IDataResult<List<OperationClaim>> GetClaims(User user);
+        IDataResult<User> GetByMail(string email);
     }
 }

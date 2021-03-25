@@ -9,12 +9,12 @@ namespace Business.Abstract
 {
     public interface ICarService:IEntityServiceBase<Car>
     {
-        IResult AddTransactionTest(Car entity);
-        IDataResult<List<CarDetailDto>> GetCarsDetail();
-        IDataResult<List<CarDetailDto>> GetCarsDetailByBrandId(int brandId);
-        IDataResult<List<CarDetailDto>> GetCarsDetailByColorId(int colorId);
-        IDataResult<List<CarDetailDto>> GetCarsDetailByBrandIdAndColorId(int brandId, int colorId);
-        IDataResult<CarDetailAndImagesDto> GetCarDetailAndImagesDto(int carId);
+        IDataResult<List<CarDetailDto>> GetCarsByBrandId(int id);
+        IDataResult<List<CarDetailDto>> GetCarsByColorId(int id);
+        IDataResult<List<CarDetailDto>> GetCarsDetailDto();
+        IDataResult<List<CarDetailDto>> GetCarByIdDetailDto(int id);
+        IDataResult<List<CarDetailDto>> GetCarsByColorAndBrandId(int colorId, int brandId);
+        IResult TransactionalOperation(Car car);
     }
 
 }
